@@ -1,0 +1,15 @@
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\bin\Debug\TreeView.exe.config
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\bin\Debug\TreeView.exe
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\bin\Debug\TreeView.pdb
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\obj\Debug\TreeView.csproj.AssemblyReference.cache
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\obj\Debug\App.g.cs
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\obj\Debug\TreeView_MarkupCompile.cache
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\obj\Debug\TreeView_MarkupCompile.lref
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\obj\Debug\TreeView.g.resources
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\obj\Debug\TreeView.Properties.Resources.resources
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\obj\Debug\TreeView.csproj.GenerateResource.cache
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\obj\Debug\TreeView.csproj.CoreCompileInputs.cache
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\obj\Debug\TreeView.exe
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\obj\Debug\TreeView.pdb
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\obj\Debug\View\MainWindow.g.cs
+C:\Users\Denis\source\repos\TreeView\TreeView\TreeView\obj\Debug\View\MainWindow.baml
