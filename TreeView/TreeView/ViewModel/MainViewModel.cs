@@ -44,7 +44,9 @@ namespace TreeView.ViewModel
 
         private void LoadTreeMethod()
         {
-            Messenger.Default.Send<NotificationMessage>(new NotificationMessage("It`s works"));
+            stick = Stick.GetSticks();
+            
+            this.RaisePropertyChanged(() => this.Tree);
         }
     }
 }
