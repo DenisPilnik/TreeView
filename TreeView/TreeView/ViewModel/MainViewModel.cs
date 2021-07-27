@@ -2,6 +2,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
@@ -47,11 +48,11 @@ namespace TreeView.ViewModel
             {
                 if (String.IsNullOrEmpty(filter))
                 {
-                    return stick;
+                    return Stick.GetFormatedStick(stick);
                 }
                 else
                 {
-                    return filteredStick;
+                    return Stick.GetFormatedStick(filteredStick);
                 }
             }
         }
