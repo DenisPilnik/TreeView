@@ -48,18 +48,18 @@ namespace TreeView.ViewModel
             {
                 if (String.IsNullOrEmpty(filter))
                 {
-                    return Stick.GetFormatedStick(stick);
+                    return stick;
                 }
                 else
                 {
-                    return Stick.GetFormatedStick(filteredStick);
+                    return filteredStick;
                 }
             }
         }
 
         private void LoadTreeMethod()
         {
-            stick = Stick.GetSticks();
+            stick = Stick.GetSticks(stick);
             this.RaisePropertyChanged(() => this.Tree);
         }
         private string filter;

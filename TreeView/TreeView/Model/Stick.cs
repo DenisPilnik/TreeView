@@ -36,45 +36,34 @@ namespace TreeView.Model
                 Set<ObservableCollection<Stick>>(() => this.Items, ref items, value);
             }
         }
-        public static ObservableCollection<Stick> GetSticks()
+        public static ObservableCollection<Stick> GetSticks(ObservableCollection<Stick> sticks)
         {
             var rnd = new Random();
             int numOfItem = 0;
             ObservableCollection<Stick> stick = new ObservableCollection<Stick>();
-            
+            if(sticks != null)
+            {
+                foreach (Stick st in sticks)
+                {
+                    stick.Add(st);
+                }
+            }
             for (int i = 0; i < 25; ++i)
             {
                 ObservableCollection<Stick> items = new ObservableCollection<Stick>();
                 numOfItem = rnd.Next(1, 10);
                 for(int j = 0; j< numOfItem; j++)
                 {
-                    items.Add(new Stick { Head = "  • Item" + rnd.Next(1, 99).ToString() });
+                    items.Add(new Stick { Head = "  • Item" + rnd.Next(1, 30).ToString() });
                 }
                 stick.Add(new Stick
                 {
-                    Head = "Category" + (i + 1).ToString(),
+                    Head = "Category" + (stick.Count + 1).ToString(),
                     Items = items
                 });
             }
            return stick;
         }
-
-        public static ObservableCollection<Stick> GetFormatedStick(ObservableCollection<Stick> stick)
-        {
-            if (stick == null)
-                return null;
-            ObservableCollection<Stick> formatedStik = new ObservableCollection<Stick>();
-            foreach(Stick st in stick)
-            {
-                formatedStik.Add(new Stick { Head = st.Head });
-                for (int i = 0; i < st.Items.Count; i++)
-                {
-                    formatedStik.Add(new Stick { Head = st.Items[i].Head});
-                }
-            }
-            return formatedStik;
-        }
-
         public static ObservableCollection<Stick> GetFilteredSticks(string filter, ObservableCollection<Stick> stick)
         {
             if (stick == null)
