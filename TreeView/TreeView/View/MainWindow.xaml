@@ -16,9 +16,13 @@
             <ColumnDefinition Width="263*"/>
         </Grid.ColumnDefinitions>
         <Button Command="{Binding LoadTreeCommand}" x:Name="btn_load" Grid.Row="1" Margin="15" FontSize="15">Load</Button>
-        <TextBox FontSize="20" Padding="10 2 0 0" Grid.Row="1" Grid.Column="1" Margin="10,15.2,10.2,15.4">Filter</TextBox>
-        <ListBox x:Name="MainTree" ItemsSource="{Binding Tree}" DisplayMemberPath="Head" Margin="10 20 10 20" Grid.ColumnSpan="2">
-
-        </ListBox>
+        <TextBox x:Name="filter" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged, Delay=1000}" FontSize="20" Padding="10 2 0 0" Grid.Row="1" Grid.Column="1" Margin="10,15.2,10.2,15.4"></TextBox>
+        <TreeView x:Name="MainTree" ItemsSource="{Binding Tree}" Margin="10 20 10 20" Grid.ColumnSpan="2">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                    <TextBlock Text="{Binding Head}"/>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
     </Grid>
 </Window>
