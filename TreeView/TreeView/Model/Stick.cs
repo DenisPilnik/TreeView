@@ -62,6 +62,12 @@ namespace TreeView.Model
         }
         public static ObservableCollection<Stick> GetSticks(ObservableCollection<Stick> sticks)
         {
+            /*
+             * 
+             *      Method to create sticks
+             *
+             */
+
             var rnd = new Random();
             int numOfItem = 0;
             ObservableCollection<Stick> stick = new ObservableCollection<Stick>();
@@ -92,6 +98,9 @@ namespace TreeView.Model
         }
         private static List<int> GetRandomNum(int ammount)
         {
+            /*
+             *  Method to Generate pseudo-random items
+             */
             var rnd = new Random();
             int num = 0;
             List<int> randomNum = new List<int>();
@@ -105,6 +114,11 @@ namespace TreeView.Model
         }
         public static ObservableCollection<Stick> GetFilteredSticks(string filter, ObservableCollection<Stick> stick)
         {
+            /*
+             * 
+             *      Method to get filtered sticks
+             *
+             */
             if (stick == null)
                 return null;
             if (String.IsNullOrEmpty(filter))

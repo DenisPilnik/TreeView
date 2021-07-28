@@ -46,7 +46,7 @@ namespace TreeView.ViewModel
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
+                return ServiceLocator.Current.GetInstance<MainViewModel>(); 
             }
         }
         

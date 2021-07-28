@@ -46,7 +46,7 @@ namespace TreeView.ViewModel
         {
             get
             {
-                if (String.IsNullOrEmpty(filter))
+                if (String.IsNullOrEmpty(filter))   // Filter-dependent transmission
                 {
                     return stick;
                 }
@@ -57,7 +57,7 @@ namespace TreeView.ViewModel
             }
         }
 
-        private void LoadTreeMethod()
+        private void LoadTreeMethod()           //Method to create and property change alert
         {
             stick = Stick.GetSticks(stick);
             this.RaisePropertyChanged(() => this.Tree);
@@ -77,7 +77,7 @@ namespace TreeView.ViewModel
             }
         }
 
-        private void SearhTree()
+        private void SearhTree()                //Method to find Stick with filter and property change alert
         {
             filteredStick = Stick.GetFilteredSticks(filter, stick);
             this.RaisePropertyChanged(() => this.Tree);
