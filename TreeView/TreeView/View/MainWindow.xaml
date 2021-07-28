@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:TreeView" xmlns:viewmodel="clr-namespace:TreeView.ViewModel" xmlns:model="clr-namespace:TreeView.Model" 
         mc:Ignorable="d"
         Title="TreeView" Height="550" Width="500" ResizeMode="NoResize">
+
     <Grid DataContext="{Binding MainViewModel, Source={StaticResource Locator}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="13*"/>

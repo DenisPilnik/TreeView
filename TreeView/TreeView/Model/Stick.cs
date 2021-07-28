@@ -79,7 +79,7 @@ namespace TreeView.Model
                 numOfItem = rnd.Next(1, 10);
                 foreach(int num in GetRandomNum(numOfItem))
                 {
-                    items.Add(new Stick { Head = "• Item" + num.ToString(), BackColor = "White", ForeColor = "Black" });
+                    items.Add(new Stick { Head = "• Item" + num.ToString(), ForeColor = "Black" });
                 }
                 stick.Add(new Stick
                 {
@@ -129,19 +129,27 @@ namespace TreeView.Model
                     filteredStick.Add(new Stick { Head = st.Head, BackColor = "Green", ForeColor = "White", Items = itemsStick });
                 }
             }
-            if(filteredStick.Count == 0)
+            foreach (Stick st in stick)
             {
-                foreach (Stick st in stick)
+                ObservableCollection<Stick> items = new ObservableCollection<Stick>();
+                for (int i = 0; i < st.Items.Count; i++)
                 {
-                    ObservableCollection<Stick> items = new ObservableCollection<Stick>();
-                    for (int i = 0; i < st.Items.Count; i++)
+                    if (st.Items[i].Head.ToLower().Contains(filter.ToLower()))
                     {
-                        if (st.Items[i].Head.ToLower().Contains(filter.ToLower()))
+                        items.Add(new Stick { Head = st.Items[i].Head, BackColor = "Green", ForeColor = "White" });
+                    }
+                }
+                if (items.Count > 0)
+                {
+                    bool exist = true;
+                    foreach(Stick _st in filteredStick)
+                    {
+                        if (_st.Head == st.Head)
                         {
-                            items.Add(new Stick { Head = st.Items[i].Head, BackColor = "Green", ForeColor = "White"});
+                            exist = false;
                         }
                     }
-                    if(items.Count > 0)
+                    if (exist)
                     {
                         filteredStick.Add(new Stick
                         {
@@ -150,7 +158,7 @@ namespace TreeView.Model
                             BackColor = "Black",
                             ForeColor = "White"
                         });
-                    }                  
+                    }
                 }
             }
             return filteredStick;
