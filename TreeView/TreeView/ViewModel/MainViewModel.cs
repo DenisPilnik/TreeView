@@ -62,6 +62,7 @@ namespace TreeView.ViewModel
             stick = Stick.GetSticks(stick);
             this.RaisePropertyChanged(() => this.Tree);
         }
+
         private string filter;
 
         public string Filter
