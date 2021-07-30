@@ -60,7 +60,7 @@ namespace TreeView.ViewModel
         private void LoadTreeMethod()           //Method to create and property change alert
         {
             stick = Stick.GetSticks(stick);
-            this.RaisePropertyChanged(() => this.Tree);
+            RaisePropertyChanged(() => this.Tree);
         }
 
         private string filter;
