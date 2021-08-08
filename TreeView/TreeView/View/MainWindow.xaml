@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TreeView" xmlns:viewmodel="clr-namespace:TreeView.ViewModel" xmlns:model="clr-namespace:TreeView.Model" 
         mc:Ignorable="d"
-        Title="TreeView" Height="550" Width="500" ResizeMode="NoResize">
+        Title="TreeView" Height="550" Width="500">
 
     <Grid DataContext="{Binding MainViewModel, Source={StaticResource Locator}}">
         <Grid.RowDefinitions>
@@ -18,102 +18,53 @@
         </Grid.ColumnDefinitions>
         <Button Command="{Binding LoadTreeCommand}" x:Name="btn_load" Grid.Row="1" Margin="15" FontSize="15">Load</Button>
         <TextBox x:Name="filter" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged, Delay=250}" FontSize="20" Padding="10 2 0 0" Grid.Row="1" Grid.Column="1" Margin="10,15.2,10.2,15.4"></TextBox>
-        <TreeView x:Name="MainTree" ScrollViewer.HorizontalScrollBarVisibility="Hidden" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Tree}" Margin="10 20 10 20" Grid.ColumnSpan="2">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                    <TextBlock Text="{Binding Head}" Foreground="{Binding ForeColor}" Background="{Binding BackColor}" VerticalAlignment="Center"/>
+        <TreeView VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.CacheLength="500" VirtualizingStackPanel.CacheLengthUnit="Pixel" x:Name="MainTree" ScrollViewer.HorizontalScrollBarVisibility="Hidden" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Categories}" Margin="10 20 10 20" Grid.ColumnSpan="2">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type model:Category}" ItemsSource="{Binding Items}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="categoryName" Text="{Binding categoryName}" Foreground="{Binding categoryColor}"/>
+                        <TextBlock Margin="10,0,0,0" Text="{Binding Items.Count, StringFormat=[ {0} ]}" />
+                    </StackPanel>
                 </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
+                <DataTemplate DataType="{x:Type model:Item}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="20 0 0 0" Text="{Binding itemName, StringFormat=• {0}}" Foreground="{Binding itemColor}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TreeView.Resources>
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
-                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
-                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                <Setter Property="TreeViewItem.IsExpanded" Value="True" />
-                <!-- Style for the selected item -->
+                    <!-- Style for the selected item -->
                 <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
-                            <ControlTemplate.Resources>
-                            </ControlTemplate.Resources>
-                            <StackPanel>
-                                <Border 
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                                <StackPanel>
+                                    <Border 
                                 x:Name="Bd"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 Padding="{TemplateBinding Padding}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="19" />
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <ContentPresenter x:Name="PART_Header" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ContentSource="Header" />
-                                    </Grid>
-                                </Border>
-                                <ItemsPresenter x:Name="ItemsHost" />
-                            </StackPanel>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsExpanded" Value="false">
-                                    <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed"/>
-                                </Trigger>
-                                <Trigger Property="HasItems" Value="false">
-                                </Trigger>
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="HasHeader" Value="false"/>
-                                        <Condition Property="Width" Value="Auto"/>
-                                    </MultiTrigger.Conditions>
-                                    <Setter TargetName="PART_Header" Property="MinWidth" Value="75"/>
-                                </MultiTrigger>
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="HasHeader" Value="false"/>
-                                        <Condition Property="Height" Value="Auto"/>
-                                    </MultiTrigger.Conditions>
-                                    <Setter TargetName="PART_Header" Property="MinHeight" Value="19"/>
-                                </MultiTrigger>
-                                <Trigger Property="IsSelected" Value="true">
-                                    <Setter TargetName="Bd" Property="Background" Value="#FF80D3F7"/>
-                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                                </Trigger>
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="IsSelected" Value="true"/>
-                                        <Condition Property="IsSelectionActive" Value="false"/>
-                                    </MultiTrigger.Conditions>
-                                    <Setter TargetName="Bd" Property="Background" Value="#FFDADADA"/>
-                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-                                </MultiTrigger>
-                                <Trigger Property="IsEnabled" Value="false">
-                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <!-- Mouse over -->
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#FF80D3F7"/>
-                        <Setter Property="BorderBrush" Value="#FF809FF7"/>
-                    </Trigger>
-                    <!-- Selected but does not have the focus -->
-                    <MultiTrigger>
-                        <MultiTrigger.Conditions>
-                            <Condition Property="IsSelected" Value="True"/>
-                            <Condition Property="IsSelectionActive" Value="False"/>
-                        </MultiTrigger.Conditions>
-                        <Setter Property="BorderBrush" Value="#FF80D3F7"/>
-                    </MultiTrigger>
-                </Style.Triggers>
-                <Style.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="0"/>
-                    </Style>
-                </Style.Resources>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="19" />
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <ContentPresenter x:Name="PART_Header" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ContentSource="Header" />
+                                        </Grid>
+                                    </Border>
+                                    <ItemsPresenter x:Name="ItemsHost" />
+                                </StackPanel>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="true">
+                                        <Setter TargetName="Bd" Property="Background" Value="#FF80D3F7"/>
+                                        <Setter Property="Foreground" Value="Black"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>

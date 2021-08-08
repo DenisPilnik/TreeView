@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using TreeView.Model;
+using System.Windows;
 
 namespace TreeView.ViewModel
 {
@@ -26,14 +27,20 @@ namespace TreeView.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase, INotifyPropertyChanged
+    public class MainViewModel : ViewModelBase
     {
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
+        public ObservableCollection<Category> categories = new ObservableCollection<Category>();
 
-        private ObservableCollection<Stick> stick;
-        private ObservableCollection<Stick> filteredStick;
+        public ObservableCollection<Category> Categories
+        {
+            get
+            {
+                return categories;
+            }
+        }
 
         public MainViewModel()
         {
@@ -42,46 +49,25 @@ namespace TreeView.ViewModel
         
         public ICommand LoadTreeCommand { get; private set; }
 
-        public ObservableCollection<Stick> Tree
+        private async void LoadTreeMethod()           //Method to create and property change alert
         {
-            get
+            await Task.Run(() =>
             {
-                if (String.IsNullOrEmpty(filter))   // Filter-dependent transmission
+                for (int i = 0; i < 25; i++)
                 {
-                    return stick;
+                    categories = Stick.createTree(categories);
+                    RaisePropertyChanged(() => Categories);
                 }
-                else
-                {
-                    return filteredStick;
-                }
-            }
-        }
-
-        private void LoadTreeMethod()           //Method to create and property change alert
-        {
-            stick = Stick.GetSticks(stick);
-            RaisePropertyChanged(() => this.Tree);
+            });
         }
 
         private string filter;
 
-        public string Filter
-        {
-            get
-            {
-                return this.filter;
-            }
-            set
-            {
-                this.filter = value;
-                SearhTree();
-            }
-        }
+        public string Filter { get => filter; set { this.filter = value; SearhTree(); } }
 
-        private void SearhTree()                //Method to find Stick with filter and property change alert
+        private void SearhTree()
         {
-            filteredStick = Stick.GetFilteredSticks(filter, stick);
-            this.RaisePropertyChanged(() => this.Tree);
+            MessageBox.Show($"Praacuet message {Filter}");
         }
     }
 }
