@@ -45,9 +45,16 @@ namespace TreeView.ViewModel
         public MainViewModel()
         {
             LoadTreeCommand = new RelayCommand(LoadTreeMethod);
+            CheckSelection = new RelayCommand(Check);
         }
         
         public ICommand LoadTreeCommand { get; private set; }
+        public ICommand CheckSelection { get; private set; }
+
+        public void Check()
+        {
+            MessageBox.Show("pracuet");
+        }
 
         private async void LoadTreeMethod()
         {

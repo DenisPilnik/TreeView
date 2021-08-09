@@ -3,10 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TreeView" xmlns:viewmodel="clr-namespace:TreeView.ViewModel" xmlns:model="clr-namespace:TreeView.Model" 
+        xmlns:local="clr-namespace:TreeView" xmlns:viewmodel="clr-namespace:TreeView.ViewModel" xmlns:model="clr-namespace:TreeView.Model" xmlns:converters="clr-namespace:TreeView.Converters"
         mc:Ignorable="d"
         Title="TreeView" Height="550" Width="500">
-
+    <Window.Resources>
+        <converters:ExistConverter x:Key="ExistString"/>
+    </Window.Resources>
     <Grid DataContext="{Binding MainViewModel, Source={StaticResource Locator}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="13*"/>
@@ -18,17 +20,17 @@
         </Grid.ColumnDefinitions>
         <Button Command="{Binding LoadTreeCommand}" x:Name="btn_load" Grid.Row="1" Margin="15" FontSize="15">Load</Button>
         <TextBox x:Name="filter" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged, Delay=250}" FontSize="20" Padding="10 2 0 0" Grid.Row="1" Grid.Column="1" Margin="10,15.2,10.2,15.4"></TextBox>
-        <TreeView VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.CacheLength="500" VirtualizingStackPanel.CacheLengthUnit="Pixel" x:Name="MainTree" ScrollViewer.HorizontalScrollBarVisibility="Hidden" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Categories}" Margin="10 20 10 20" Grid.ColumnSpan="2">
+        <TreeView VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.CacheLength="500" VirtualizingStackPanel.CacheLengthUnit="Pixel" x:Name="MainTree" ScrollViewer.HorizontalScrollBarVisibility="Hidden" VerticalContentAlignment="Top" VerticalAlignment="Stretch" ItemsSource="{Binding Categories}" Margin="10 20 10 20" Grid.ColumnSpan="2">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type model:Category}" ItemsSource="{Binding Items}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Name="categoryName" Text="{Binding CategoryName}" Foreground="{Binding CategoryColor}"/>
+                        <TextBlock x:Name="categoryName" Text="{Binding CategoryName}" Foreground="{Binding CategoryExist, Converter={StaticResource ExistString}}"/>
                         <TextBlock Margin="10,0,0,0" Text="{Binding Items.Count, StringFormat=[ {0} ]}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <DataTemplate DataType="{x:Type model:Item}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="20 0 0 0" Text="{Binding ItemName, StringFormat=• {0}}" Foreground="{Binding ItemColor}"/>
+                        <TextBlock Padding="0 0 0 0" Margin="20 0 0 0" Text="{Binding ItemName, StringFormat=• {0}}" Foreground="{Binding ItemExist, Converter={StaticResource ExistString}}"/>
                     </StackPanel>
                 </DataTemplate>
             </TreeView.Resources>
@@ -59,6 +61,10 @@
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="true">
                                         <Setter TargetName="Bd" Property="Background" Value="#FF80D3F7"/>
+                                        <Setter Property="Foreground" Value="Black"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelectionActive" Value="False">
+                                        <Setter TargetName="Bd" Property="Background" Value="White"/>
                                         <Setter Property="Foreground" Value="Black"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>

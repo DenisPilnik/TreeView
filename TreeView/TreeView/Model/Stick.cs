@@ -1,12 +1,7 @@
-﻿using GalaSoft.MvvmLight;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace TreeView.Model
 {
@@ -15,8 +10,8 @@ namespace TreeView.Model
         private static Random random = new Random((int)DateTime.Now.Ticks);
         public static Category CreateTree(int categoriesCount)
         {
-            Category category = new Category() { CategoryName = $"Category {categoriesCount + 1}", CategoryColor = "Black" };
-            GetRandomNum(random.Next(1, 10)).ToList().ForEach(j => category.Items.Add(new Item() { ItemName = $"Item{j}", ItemColor = "Black" }));
+            Category category = new Category() { CategoryName = $"Category {categoriesCount + 1}", CategoryExist = false };
+            GetRandomNum(random.Next(1, 10)).ToList().ForEach(j => category.Items.Add(new Item() { ItemName = $"Item{j}", ItemExist = false }));
             return category;
         }
 
@@ -29,29 +24,29 @@ namespace TreeView.Model
         {
             if (String.IsNullOrEmpty(filter))
             {
-                cat.Items.ToList().ForEach(i => i.ItemColor = "Black");
+                cat.Items.ToList().ForEach(i => i.ItemExist = false);
                 return cat;
             }
             Category category = new Category();
             if (cat.CategoryName.ToLower().Contains(filter))
             {
-                category.CategoryColor = "Green";
-                cat.Items.ToList().ForEach(i => App.Current.Dispatcher.Invoke(delegate { category.Items.Add(i);}));
+                category.CategoryExist = true;
+                cat.Items.ToList().ForEach(i => App.Current.Dispatcher.Invoke(delegate { category.Items.Add(i); }));
             }
             else
             {
-                category.CategoryColor = "Black";
+                category.CategoryExist = false;
                 IEnumerable<Item> filteredItems = cat.Items.Where(s => s.ItemName.ToLower().Contains(filter));
                 filteredItems.ToList().ForEach(i => App.Current.Dispatcher.Invoke(delegate { category.Items.Add(i); }));
             }
-            category.Items.ToList().ForEach(i => i.ItemColor = i.ItemName.ToLower().Contains(filter) ? "Green" : "Black");
+            category.Items.ToList().ForEach(i => i.ItemExist = i.ItemName.ToLower().Contains(filter));
             category.CategoryName = cat.CategoryName;
             return category;
         }
 
         public static bool ExistString(Category cat, string filter)
         {
-            return cat.CategoryName.ToLower().Contains(filter) ? true : cat.Items.Any( s =>  s.ItemName.ToLower().Contains(filter));
+            return cat.CategoryName.ToLower().Contains(filter) ? true : cat.Items.Any(s => s.ItemName.ToLower().Contains(filter));
         }
     }
 
@@ -63,16 +58,16 @@ namespace TreeView.Model
         }
 
         private string categoryName;
-        private string categoryColor;
+        private bool categoryExist;
         public string CategoryName { get => categoryName; set => categoryName = value; }
-        public string CategoryColor { get => categoryColor; set => categoryColor = value; }
+        public bool CategoryExist { get => categoryExist; set => categoryExist = value; }
         public ObservableCollection<Item> Items { get; set; }
     }
     public class Item
     {
         private string itemName { get; set; }
-        private string itemColor { get; set; }
+        private bool itemExist { get; set; }
         public string ItemName { get => itemName; set => itemName = value; }
-        public string ItemColor { get => itemColor; set => itemColor = value; }
+        public bool ItemExist { get => itemExist; set => itemExist = value; }
     }
 }
