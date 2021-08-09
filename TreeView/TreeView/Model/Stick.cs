@@ -12,42 +12,46 @@ namespace TreeView.Model
 {
     public static class Stick
     {
-        public static ObservableCollection<Category> createTree(ObservableCollection<Category> categories)
+        private static Random random = new Random((int)DateTime.Now.Ticks);
+        public static Category CreateTree(int categoriesCount)
         {
-            ObservableCollection<Category> category = new ObservableCollection<Category>();
-            category = categories;
-            int numOfItem;
-            var random = new Random((int)DateTime.Now.Ticks);
-            Category categoryCount = new Category() { categoryName = $"Category {category.Count + 1}", categoryColor = "Black" };
-            numOfItem = random.Next(1, 10);
-            foreach (int j in GetRandomNum(numOfItem))
-            {
-                categoryCount.Items.Add(new Item() { itemName = $"Item{j}", itemColor = "Black" });
-            }
-            App.Current.Dispatcher.Invoke((Action)delegate
-            {
-                category.Add(categoryCount);
-            });
+            Category category = new Category() { CategoryName = $"Category {categoriesCount + 1}", CategoryColor = "Black" };
+            GetRandomNum(random.Next(1, 10)).ToList().ForEach(j => category.Items.Add(new Item() { ItemName = $"Item{j}", ItemColor = "Black" }));
             return category;
         }
 
         private static int[] GetRandomNum(int ammount)
         {
-            /*
-             *  Method to Generate pseudo-random items
-             */
-            var rnd = new Random((int)DateTime.Now.Ticks);
-            int num = 0;
-            int[] randomNum = new int[ammount];
-            for (int i = 0; i < ammount; i++)
+            return Enumerable.Range(1, 30).OrderBy(x => random.Next()).Take(ammount).ToArray();
+        }
+
+        public static Category GetCategory(Category cat, string filter)
+        {
+            if (String.IsNullOrEmpty(filter))
             {
-                num = rnd.Next(1, 30);
-                if (!randomNum.Contains(num))
-                    randomNum[i] = num;
-                else
-                    i--;
+                cat.Items.ToList().ForEach(i => i.ItemColor = "Black");
+                return cat;
             }
-            return randomNum;
+            Category category = new Category();
+            if (cat.CategoryName.ToLower().Contains(filter))
+            {
+                category.CategoryColor = "Green";
+                cat.Items.ToList().ForEach(i => App.Current.Dispatcher.Invoke(delegate { category.Items.Add(i);}));
+            }
+            else
+            {
+                category.CategoryColor = "Black";
+                IEnumerable<Item> filteredItems = cat.Items.Where(s => s.ItemName.ToLower().Contains(filter));
+                filteredItems.ToList().ForEach(i => App.Current.Dispatcher.Invoke(delegate { category.Items.Add(i); }));
+            }
+            category.Items.ToList().ForEach(i => i.ItemColor = i.ItemName.ToLower().Contains(filter) ? "Green" : "Black");
+            category.CategoryName = cat.CategoryName;
+            return category;
+        }
+
+        public static bool ExistString(Category cat, string filter)
+        {
+            return cat.CategoryName.ToLower().Contains(filter) ? true : cat.Items.Any( s =>  s.ItemName.ToLower().Contains(filter));
         }
     }
 
@@ -58,13 +62,17 @@ namespace TreeView.Model
             Items = new ObservableCollection<Item>();
         }
 
-        public string categoryName { get; set; }
-        public string categoryColor { get; set; }
+        private string categoryName;
+        private string categoryColor;
+        public string CategoryName { get => categoryName; set => categoryName = value; }
+        public string CategoryColor { get => categoryColor; set => categoryColor = value; }
         public ObservableCollection<Item> Items { get; set; }
     }
     public class Item
     {
-        public string itemName { get; set; }
-        public string itemColor { get; set; }
+        private string itemName { get; set; }
+        private string itemColor { get; set; }
+        public string ItemName { get => itemName; set => itemName = value; }
+        public string ItemColor { get => itemColor; set => itemColor = value; }
     }
 }

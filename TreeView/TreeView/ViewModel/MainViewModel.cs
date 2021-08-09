@@ -11,7 +11,6 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using TreeView.Model;
-using System.Windows;
 
 namespace TreeView.ViewModel
 {
@@ -33,12 +32,13 @@ namespace TreeView.ViewModel
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public ObservableCollection<Category> categories = new ObservableCollection<Category>();
+        public ObservableCollection<Category> filteredCategories = new ObservableCollection<Category>();
 
         public ObservableCollection<Category> Categories
         {
             get
             {
-                return categories;
+                return String.IsNullOrEmpty(Filter) ? categories : filteredCategories;
             }
         }
 
@@ -49,13 +49,13 @@ namespace TreeView.ViewModel
         
         public ICommand LoadTreeCommand { get; private set; }
 
-        private async void LoadTreeMethod()           //Method to create and property change alert
+        private async void LoadTreeMethod()
         {
             await Task.Run(() =>
             {
                 for (int i = 0; i < 25; i++)
                 {
-                    categories = Stick.createTree(categories);
+                    App.Current.Dispatcher.Invoke(delegate { categories.Add(Stick.CreateTree(categories.Count));});
                     RaisePropertyChanged(() => Categories);
                 }
             });
@@ -63,11 +63,22 @@ namespace TreeView.ViewModel
 
         private string filter;
 
-        public string Filter { get => filter; set { this.filter = value; SearhTree(); } }
+        public string Filter { get => filter; set{ filter = value.ToLower(); SearhTree(); } }
 
-        private void SearhTree()
+        private async void SearhTree()
         {
-            MessageBox.Show($"Praacuet message {Filter}");
+            filteredCategories.Clear();
+            await Task.Run(() =>
+            {
+                foreach(Category category in categories)
+                {
+                    if(Stick.ExistString(category, Filter))
+                    {
+                        App.Current.Dispatcher.Invoke(delegate { filteredCategories.Add(Stick.GetCategory(category, Filter)); });
+                        RaisePropertyChanged(() => Categories);
+                    }
+                }
+            });
         }
     }
 }

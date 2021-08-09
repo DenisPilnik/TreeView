@@ -22,20 +22,20 @@
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type model:Category}" ItemsSource="{Binding Items}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Name="categoryName" Text="{Binding categoryName}" Foreground="{Binding categoryColor}"/>
+                        <TextBlock x:Name="categoryName" Text="{Binding CategoryName}" Foreground="{Binding CategoryColor}"/>
                         <TextBlock Margin="10,0,0,0" Text="{Binding Items.Count, StringFormat=[ {0} ]}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <DataTemplate DataType="{x:Type model:Item}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="20 0 0 0" Text="{Binding itemName, StringFormat=• {0}}" Foreground="{Binding itemColor}"/>
+                        <TextBlock Margin="20 0 0 0" Text="{Binding ItemName, StringFormat=• {0}}" Foreground="{Binding ItemColor}"/>
                     </StackPanel>
                 </DataTemplate>
             </TreeView.Resources>
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <!-- Style for the selected item -->
-                <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="BorderThickness" Value="1"/>
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type TreeViewItem}">
